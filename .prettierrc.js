@@ -4,6 +4,6 @@ module.exports = {
   jsxBracketSameLine: true,
   singleQuote: true,
   semi: false,
-  lineWitdh: 180,
+  lineWitdh: 150,
   trailingComma: 'es5',
 };
