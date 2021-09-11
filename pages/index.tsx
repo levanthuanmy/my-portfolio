@@ -1,5 +1,5 @@
-import { Menu, Transition } from '@headlessui/react'
-import React, { FC, lazy, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
+import MyMenu from '../components/MyMenu'
 
 const Home: FC<{}> = () => {
   const homeRef = useRef<any>(null)
@@ -11,6 +11,7 @@ const Home: FC<{}> = () => {
   const [isFlip, setIsFlip] = useState<boolean>(false)
   const [isScrollDown, setIsScrollDown] = useState<boolean>(false)
   const [current, setCurrent] = useState<string>('Home')
+  const [darkMode, setDarkMode] = useState<boolean>(false)
 
   const scrollToRef = (ref: any) => {
     ref?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -50,111 +51,14 @@ const Home: FC<{}> = () => {
 
   return (
     <main ref={mainRef} className="snap-container h-screen overflow-y-scroll text-white" onScroll={() => handleScroll(menuTitle)}>
-      <nav>
-        {/* >= sm screen */}
-        <div
-          style={{ width: 'calc(100vw - 5px)' }}
-          className={`grid-cols-10 text-center hidden sm:grid fixed ${isScrollDown && 'bg-white bg-opacity-40 text-black'}`}>
-          {menuTitle.map((item, idx) => (
-            <>
-              {item.name === 'Home' ? (
-                <div
-                  key={idx}
-                  onClick={() => handleClickTopNav(item.ref, item.name)}
-                  className={`cursor-pointer py-3 hover:text-white focus:text-white col-span-1 flex justify-center`}>
-                  {current !== item.name ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </svg>
-                  ) : (
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="currentColor">
-                      <g>
-                        <path
-                          stroke="null"
-                          d="m13.04051,3.3749a1.23101,1.14618 0 0 0 -1.74064,0l-8.61704,8.02324a1.23101,1.14618 0 0 0 1.74064,1.62069l0.36069,-0.33584l0,7.54872a1.23101,1.14618 0 0 0 1.23101,1.14618l2.46201,0a1.23101,1.14618 0 0 0 1.23101,-1.14618l0,-2.29235a1.23101,1.14618 0 0 1 1.23101,-1.14618l2.46201,0a1.23101,1.14618 0 0 1 1.23101,1.14618l0,2.29235a1.23101,1.14618 0 0 0 1.23101,1.14618l2.46201,0a1.23101,1.14618 0 0 0 1.23101,-1.14618l0,-7.54872l0.36069,0.33584a1.23101,1.14618 0 0 0 1.74064,-1.62069l-8.61704,-8.02324l-0.00003,0z"
-                        />
-                      </g>
-                    </svg>
-                  )}
-                </div>
-              ) : item.name === 'Settings' ? (
-                <div
-                  key={idx}
-                  onClick={() => console.log('object')}
-                  className={`cursor-pointer py-3 hover:text-white hover:bg-gray-400  col-span-1 flex justify-center`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-              ) : (
-                <div
-                  key={idx}
-                  onClick={() => handleClickTopNav(item.ref, item.name)}
-                  className={`cursor-pointer py-3 hover:bg-gray-400 hover:text-white col-span-2 ${
-                    current === item.name && 'bg-gray-500 text-white'
-                  }`}>
-                  {item.name}
-                </div>
-              )}
-            </>
-          ))}
-        </div>
-        {/* < sm screen */}
-        <div style={{ width: 'calc(100vw - 2px)' }} className="sm:hidden text-right fixed">
-          <Menu>
-            {({ open }) => (
-              <>
-                <Menu.Button className="bg-black w-min p-3 cursor-pointer">
-                  {open ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  )}
-                </Menu.Button>
-                <Transition
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0">
-                  <Menu.Items className="text-center bg-white text-black">
-                    {menuTitle.map((item, idx) => (
-                      <Menu.Item>
-                        <div
-                          key={idx}
-                          onClick={() => handleClickTopNav(item.ref, item.name)}
-                          className="cursor-pointer py-3 hover:bg-gray-500 hover:text-white focus:bg-gray-500 focus:text-white grid grid-cols-12">
-                          <div className="col-span-1 flex justify-end self-center">
-                            {current === item.name && <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>}
-                          </div>
-                          <div className={`col-span-10 ${current === item.name && 'text-yellow-500'}`}>{item.name}</div>
-                          <div className="col-span-1"></div>
-                        </div>
-                      </Menu.Item>
-                    ))}
-                  </Menu.Items>
-                </Transition>
-              </>
-            )}
-          </Menu>
-        </div>
-      </nav>
+      <MyMenu
+        current={current}
+        handleClickTopNav={handleClickTopNav}
+        isScrollDown={isScrollDown}
+        menuTitle={menuTitle}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
       <div ref={homeRef} className="h-screen snap-child">
         <img src={img} alt="img" className="w-screen h-screen object-cover absolute top-0 left-0" style={{ zIndex: -1 }} />
         <div className="h-screen grid grid-cols-1 lg:grid-cols-2 items-center text-center">
@@ -183,8 +87,19 @@ const Home: FC<{}> = () => {
         }}>
         detail information
       </div>
-      <div ref={skillRef} className="text-white h-screen bg-red-300 snap-child pt-16">
-        skilll
+      <div ref={skillRef} className="text-white h-screen bg-white snap-child pt-16">
+        <div className="flex justify-center mt-32">
+          <img
+            src="https://scontent.xx.fbcdn.net/v/t1.15752-9/234600581_964115151104717_430242195234628819_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=aee45a&_nc_ohc=gaNj_mFPCJsAX8rPTpY&_nc_ht=scontent.xx&oh=8bad9b018547c995b232b4c451156e5a&oe=61600D3C"
+            alt=""
+            className="w-96 h-64 object-cover"
+          />
+          <img
+            src="https://scontent.xx.fbcdn.net/v/t1.15752-9/231844334_152240897045642_9201570931905168414_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=aee45a&_nc_ohc=lEXpRndPLwsAX8n9WGb&_nc_ht=scontent.xx&oh=543f0635d8304ae774859f3d4d63de9d&oe=615EA3BF"
+            alt=""
+            className="w-56 h-96 object-cover ml-[-7rem] mt-[3rem]"
+          />
+        </div>
       </div>
       <div ref={expRef} className="text-white h-screen bg-red-300 snap-child flex justify-center items-center">
         experience
@@ -207,7 +122,7 @@ const Home: FC<{}> = () => {
                   setIsFlip(!isFlip)
                 }}>
                 <div className="flex justify-center w-full h-full items-center">
-                  {isFlip ? (
+                  {!isFlip ? (
                     <div className="flex flex-col items-center">
                       <img src={item.icon} alt={item.name} className="w-10 h-10" />
                       <div className="pt-3">{item.name}</div>
